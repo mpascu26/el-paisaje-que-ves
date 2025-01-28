@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> El paisaje que ves </title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        header {
+            background-color: #FBBC8E;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .upload-section {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .upload-section input[type="file"] {
+            display: none;
+        }
+        .upload-section label {
+            display: inline-block;
+            background-color: #F7E6B4;
+            color: black;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .upload-section input[type="text"] {
+            margin-top: 10px;
+            padding: 10px;
+            width: calc(100% - 20px);
+            max-width: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .photo-card {
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+        }
+        .photo-card img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .photo-card .info {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        .feedback-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .feedback-section textarea {
+            width: calc(100% - 20px);
+            max-width: 600px;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .feedback-section button {
+            margin-top: 10px;
+            background-color: #F7E6B4;
+            color: black;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1> El Paisaje que Ves </h1>
+        <p>¡Sube tu foto y mira cómo cambia! </p>
+    </header>
+    <div class="container">
+        <div class="upload-section">
+            <label for="file-input"> Subir foto </label>
+            <input type="file" id="file-input" accept="image/*" onchange="uploadPhoto(event)">
+            <br>
+            <input type="text" id="username" placeholder="Nombre (opcional)">
+        </div>
+        <div class="gallery" id="gallery">
+            <!-- Uploaded images will appear here -->
+        </div>
+        <div class="feedback-section">
+            <h3> ¡Déjanos tu opinión! </h3>
+            <textarea id="feedback" placeholder="¿Qué piensas ahora del paisaje? ¿Qué te ha parecido esta página? (opcional) "></textarea>
+            <br>
+            <button onclick="submitFeedback()"> Publicar comentario </button>
+        </div>
+    </div>
+
+    <script>
+        const gallery = document.getElementById('gallery');
+
+        function uploadPhoto(event) {
+            const file = event.target.files[0];
+            const username = document.getElementById('username').value;
+            const timestamp = new Date().toLocaleString();
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const photoCard = document.createElement('div');
+                    photoCard.classList.add('photo-card');
+
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+
+                    const info = document.createElement('div');
+                    info.classList.add('info');
+                    info.innerHTML = `<strong>${username || "Anonymous"}</strong><br>${timestamp}`;
+
+                    photoCard.appendChild(img);
+                    photoCard.appendChild(info);
+                    gallery.appendChild(photoCard);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('feedback').value;
+            if (feedback.trim()) {
+                alert('Thank you for your feedback!');
+                document.getElementById('feedback').value = '';
+            } else {
+                alert('Please write some feedback before submitting.');
+            }
+        }
+    </script>
+</body>
+</html>
